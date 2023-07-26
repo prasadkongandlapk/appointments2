@@ -5,13 +5,13 @@ import {v4 as uuidv4} from 'uuid'
 
 import AppointmentItem from '../AppointmentItem'
 
-const appointmentsList = []
+const initialAppointmentsList = []
 class Appointments extends Component {
   state = {
     title: '',
     date: '',
     isStarred: false,
-    appointmentsList: appointmentsList,
+    appointmentsList: initialAppointmentsList,
   }
 
   onChangeTitle = event => {
@@ -56,7 +56,7 @@ class Appointments extends Component {
   }
 
   renderStarredMsg = () => {
-    const {isFavourite} = this.state
+    const {isFavourite, appointmentsList} = this.state
     return (
       <li>
         {appointmentsList.filter(eachaa => {
@@ -67,7 +67,7 @@ class Appointments extends Component {
   }
 
   render() {
-    const {title, date, isStarred} = this.state
+    const {title, date, isStarred, appointmentsList} = this.state
 
     const displayDate = format(new Date(date), 'dd MMMM yyyy, EEEE')
 
@@ -111,17 +111,16 @@ class Appointments extends Component {
             <button className="str-btn">Starred</button>
           </div>
           <ul>
-          if (isstarred===true){
-              this.renderStarredMsg()
-          }else{
-            {appointmentsList.map(eachAppmnt => (
-              <AppointmentItem
-                appmtDetails={eachAppmnt}
-                key={eachAppmnt.id}
-                onFavourite={this.onFavourite}
-                onStarred={this.onStarred}
-              />
-            ))}}
+            {isStarred === true
+              ? this.renderStarredMsg()
+              : appointmentsList.map(eachAppmnt => (
+                  <AppointmentItem
+                    appmtDetails={eachAppmnt}
+                    key={eachAppmnt.id}
+                    onFavourite={this.onFavourite}
+                    onStarred={this.onStarred}
+                  />
+                ))}
           </ul>
         </div>
       </div>
