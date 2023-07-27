@@ -1,15 +1,19 @@
 import {Component} from 'react'
+
 import './index.css'
+
 import {format} from 'date-fns'
+
 import {v4 as uuidv4} from 'uuid'
 
 import AppointmentItem from '../AppointmentItem'
 
 const initialAppointmentsList = []
+
 class Appointments extends Component {
   state = {
     title: '',
-    date: '',
+    date: new Date(),
     isStarred: false,
     appointmentsList: initialAppointmentsList,
   }
@@ -24,7 +28,7 @@ class Appointments extends Component {
 
   onSubmitForm = event => {
     event.preventDefault()
-    const {title, date} = this.state
+    const {title, date, appointmentsList} = this.state
 
     const newAppointment = {
       id: uuidv4(),
@@ -32,12 +36,13 @@ class Appointments extends Component {
       date,
       isFavourite: false,
     }
-
-    this.setState(prevState => ({
-      appointmentsList: [...prevState.appointmentsList, newAppointment],
-      title: '',
-      date: '',
-    }))
+    if (title.length > 0 && date.length > 0) {
+      this.setState(prevState => ({
+        appointmentsList: [...appointmentsList, newAppointment],
+        title: '',
+        date: '',
+      }))
+    }
   }
 
   onFavourite = id => {
@@ -53,17 +58,6 @@ class Appointments extends Component {
 
   onStarred = () => {
     this.setState(prevState => ({isStarred: !prevState.isStarred}))
-  }
-
-  renderStarredMsg = () => {
-    const {isFavourite, appointmentsList} = this.state
-    return (
-      <li>
-        {appointmentsList.filter(eachaa => {
-          eachaa.isFavourite === true
-        })}
-      </li>
-    )
   }
 
   render() {
@@ -108,19 +102,19 @@ class Appointments extends Component {
           <hr />
           <div className="str-app">
             <h1 className="h1">Appointments</h1>
-            <button className="str-btn">Starred</button>
+            <button type="button" className="str-btn">
+              Starred
+            </button>
           </div>
           <ul>
-            {isStarred === true
-              ? this.renderStarredMsg()
-              : appointmentsList.map(eachAppmnt => (
-                  <AppointmentItem
-                    appmtDetails={eachAppmnt}
-                    key={eachAppmnt.id}
-                    onFavourite={this.onFavourite}
-                    onStarred={this.onStarred}
-                  />
-                ))}
+            {appointmentsList.map(eachAppmnt => (
+              <AppointmentItem
+                appmtDetails={eachAppmnt}
+                key={eachAppmnt.id}
+                onFavourite={this.onFavourite}
+                onStarred={this.onStarred}
+              />
+            ))}
           </ul>
         </div>
       </div>
