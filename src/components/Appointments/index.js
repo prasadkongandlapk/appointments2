@@ -36,13 +36,11 @@ class Appointments extends Component {
       date,
       isFavourite: false,
     }
-    if (title.length > 0 && date.length > 0) {
-      this.setState(prevState => ({
-        appointmentsList: [...appointmentsList, newAppointment],
-        title: '',
-        date: '',
-      }))
-    }
+    this.setState(prevState => ({
+      appointmentsList: [...prevState.appointmentsList, newAppointment],
+      title: '',
+      date: '',
+    }))
   }
 
   onFavourite = id => {

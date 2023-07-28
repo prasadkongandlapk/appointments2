@@ -16,8 +16,8 @@ const AppointmentItem = props => {
     : 'https://assets.ccbp.in/frontend/react-js/appointments-app/filled-star-img.png'
 
   return (
-    <div className="list">
-      <li>
+    <li>
+      <div className="list">
         <div>
           <p>{title}</p>
           <p>{date}</p>
@@ -25,8 +25,8 @@ const AppointmentItem = props => {
         <button type="button" onClick={onClickFvtBtn}>
           <img src={favouritBtn} alt="favourite" />
         </button>
-      </li>
-    </div>
+      </div>
+    </li>
   )
 }
 
