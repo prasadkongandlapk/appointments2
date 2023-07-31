@@ -8,14 +8,12 @@ import {v4 as uuidv4} from 'uuid'
 
 import AppointmentItem from '../AppointmentItem'
 
-const initialAppointmentsList = []
-
 class Appointments extends Component {
   state = {
     title: '',
     date: new Date(),
     isStarred: false,
-    appointmentsList: initialAppointmentsList,
+    appointmentsList: [],
   }
 
   onChangeTitle = event => {
@@ -30,17 +28,19 @@ class Appointments extends Component {
     event.preventDefault()
     const {title, date, appointmentsList} = this.state
 
-    const newAppointment = {
-      id: uuidv4(),
-      title,
-      date,
-      isFavourite: false,
+    if (title.length > 0 && date.length > 0) {
+      const newAppointment = {
+        id: uuidv4(),
+        title,
+        date,
+        isFavourite: false,
+      }
+      this.setState(prevState => ({
+        appointmentsList: [...prevState.appointmentsList, newAppointment],
+        title: '',
+        date: '',
+      }))
     }
-    this.setState(prevState => ({
-      appointmentsList: [...prevState.appointmentsList, newAppointment],
-      title: '',
-      date: '',
-    }))
   }
 
   onFavourite = id => {
