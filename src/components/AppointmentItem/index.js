@@ -1,30 +1,35 @@
 import './index.css'
+import {format} from 'date-fns'
 
 const AppointmentItem = props => {
-  const {appmtDetails, onFavourite, onStarred} = props
-  const {id, title, date, isFavourite, isStarred} = appmtDetails
+  const {appmtDetails, onFavourite} = props
+  const {id, title, date, isFavourite} = appmtDetails
 
-  const onClickFvtBtn = () => {
+  const favouritBtn = isFavourite
+    ? 'https://assets.ccbp.in/frontend/react-js/appointments-app/filled-star-img.png'
+    : 'https://assets.ccbp.in/frontend/react-js/appointments-app/star-img.png'
+
+  const onClickBtn = () => {
     onFavourite(id)
   }
 
-  const onClickSrtBtn = () => {
-    onStarred(id)
-  }
-  const favouritBtn = isFavourite
-    ? 'https://assets.ccbp.in/frontend/react-js/appointments-app/star-img.png'
-    : 'https://assets.ccbp.in/frontend/react-js/appointments-app/filled-star-img.png'
-
   return (
     <li>
-      <div className="list">
-        <div>
-          <p>{title}</p>
-          <p>{date}</p>
+      <div className="app-container">
+        <div className="align-row">
+          <p className="title">{title}</p>
+          <button
+            type="button"
+            data-testid="star"
+            onClick={onClickBtn}
+            className="btn-favourite"
+          >
+            <img src={favouritBtn} alt="star" />
+          </button>
         </div>
-        <button type="button" onClick={onClickFvtBtn}>
-          <img src={favouritBtn} alt="favourite" />
-        </button>
+        <p className="date">
+          date: {format(new Date(date), 'dd MMMM yyyy, EEEE')}
+        </p>
       </div>
     </li>
   )

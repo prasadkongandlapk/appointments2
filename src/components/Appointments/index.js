@@ -1,11 +1,6 @@
 import {Component} from 'react'
-
 import './index.css'
-
-import {format} from 'date-fns'
-
 import {v4 as uuidv4} from 'uuid'
-
 import AppointmentItem from '../AppointmentItem'
 
 class Appointments extends Component {
@@ -13,6 +8,7 @@ class Appointments extends Component {
     title: '',
     date: new Date(),
     isStarred: false,
+    isFavourite: false,
     appointmentsList: [],
   }
 
@@ -26,7 +22,7 @@ class Appointments extends Component {
 
   onSubmitForm = event => {
     event.preventDefault()
-    const {title, date, appointmentsList} = this.state
+    const {title, date} = this.state
 
     if (title.length > 0 && date.length > 0) {
       const newAppointment = {
@@ -59,10 +55,11 @@ class Appointments extends Component {
   }
 
   render() {
-    const {title, date, isStarred, appointmentsList} = this.state
+    const {title, isStarred, date, appointmentsList} = this.state
 
-    const displayDate = format(new Date(date), 'dd MMMM yyyy, EEEE')
-
+    const starredAppointments = appointmentsList.filter(
+      each => each.isFavourite === true,
+    )
     return (
       <div className="bg">
         <div className="card">
@@ -74,7 +71,7 @@ class Appointments extends Component {
                 <input
                   onChange={this.onChangeTitle}
                   placeholder="Title"
-                  name="title"
+                  id="title"
                   value={title}
                 />
               </div>
@@ -83,7 +80,8 @@ class Appointments extends Component {
                 <input
                   onChange={this.onChangeDate}
                   type="date"
-                  name="date"
+                  id="date"
+                  placeholder="dd/mm/yyyy"
                   value={date}
                 />
               </div>
@@ -100,19 +98,28 @@ class Appointments extends Component {
           <hr />
           <div className="str-app">
             <h1 className="h1">Appointments</h1>
-            <button type="button" className="str-btn">
+            <button type="button" onClick={this.onStarred} className="str-btn">
               Starred
             </button>
           </div>
           <ul>
-            {appointmentsList.map(eachAppmnt => (
-              <AppointmentItem
-                appmtDetails={eachAppmnt}
-                key={eachAppmnt.id}
-                onFavourite={this.onFavourite}
-                onStarred={this.onStarred}
-              />
-            ))}
+            {isStarred === true
+              ? starredAppointments.map(eachAppmnt => (
+                  <AppointmentItem
+                    appmtDetails={eachAppmnt}
+                    key={eachAppmnt.id}
+                    onFavourite={this.onFavourite}
+                    onStarred={this.onStarred}
+                  />
+                ))
+              : appointmentsList.map(eachAppmnt => (
+                  <AppointmentItem
+                    appmtDetails={eachAppmnt}
+                    key={eachAppmnt.id}
+                    onFavourite={this.onFavourite}
+                    onStarred={this.onStarred}
+                  />
+                ))}
           </ul>
         </div>
       </div>
